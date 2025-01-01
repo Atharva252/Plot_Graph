@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disease Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            
+            /* Background Image */
+            background-image: url('{{ url_for("static", filename="images/scene.jpg") }}');
+            background-size: cover; /* Cover the entire viewport */
+            background-position: center; /* Center the image */
+            background-attachment: fixed; /* Fixed background during scrolling */
+            background-repeat: no-repeat; /* Prevent image tiling */
+        }
+        .container {
+            margin-top: 50px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* Slight white background for readability */
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        select, button {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Disease Probability Graph</h1>
+        <form action="/plot" method="POST">
+            <label for="disease">Select a disease:</label>
+            <br>
+            <select id="disease" name="disease_name">
+                {% for disease in diseases %}
+                <option value="{{ disease }}">{{ disease }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <button type="submit">Generate Graph</button>
+        </form>
+    </div>
+</body>
+</html>
