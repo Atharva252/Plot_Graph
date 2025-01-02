@@ -30,54 +30,46 @@ disease_names = [
     'Wheat__brown_rust', 'Wheat__healthy', 'Wheat__septoria', 'Wheat__yellow_rust'
 ]
 
-# Random probabilities for each disease (replace with actual probabilities if available)
-disease_probabilities = np.random.rand(88)
+# Random probabilities for each disease
+disease_probabilities = np.random.rand(len(disease_names))
 
 # Home route
-@app.route('/disease-prediction')
+@app.route('/disease-prediction', methods=['GET', 'POST'])
 def index():
-    return render_template('index1.html',diseases=disease_names)
+    if request.method == 'POST':
+        # Get selected disease from the form
+        selected_disease = request.form['disease_name']
+        return generate_plot(selected_disease)
+    return render_template('index1.html', diseases=disease_names)
 
-
-# Plot route
-@app.route('/plot', methods=['POST'])
-def plot():
-    # Get disease name from the form
-    input_disease = request.form['disease_name']
-    
-    # Check if the disease is valid
-    if input_disease in disease_names:
-        # Find the index of the disease
-        index = disease_names.index(input_disease)
+# Function to generate the plot
+def generate_plot(disease_name):
+    if disease_name in disease_names:
+        # Find the probability of the selected disease
+        index = disease_names.index(disease_name)
+        probability = disease_probabilities[index]
         
-        # Get the probability for the selected disease
-        disease_probability = disease_probabilities[index]
-        
-        # Create the bar chart for the selected disease
+        # Create the plot
         plt.figure(figsize=(6, 4))
-        plt.bar(input_disease, disease_probability, color='lightgreen')
-        
-        # Adding title and labels
-        plt.title(f'Probability of {input_disease}', fontsize=16)
+        plt.bar(disease_name, probability, color='lightgreen')
+        plt.title(f'Probability of {disease_name}', fontsize=16)
         plt.xlabel('Disease', fontsize=12)
         plt.ylabel('Probability', fontsize=12)
-        
-        # Show the probability value on top of the bar
-        plt.text(0, disease_probability + 0.01, f'{disease_probability:.2f}', ha='center', fontsize=12)
-        
-        # Save the plot to a bytes buffer
-        buf = io.BytesIO()
+        plt.text(0, probability + 0.01, f'{probability:.2f}', ha='center', fontsize=12)
         plt.tight_layout()
+        
+        # Save the plot to a buffer
+        buf = io.BytesIO()
         plt.savefig(buf, format='png')
         buf.seek(0)
+        plt.close()
         
-        # Encode the image to display in the HTML template
+        # Encode the plot as a base64 string
         plot_url = base64.b64encode(buf.getvalue()).decode('utf8')
         return render_template('plot.html', plot_url=plot_url)
-    
     else:
-        return f"Error: The disease '{input_disease}' is not in the list of diseases."
+        return f"Error: Disease '{disease_name}' is not in the list."
 
 # Run the Flask app
 if __name__ == '__main__':
-     app.run(host='127.0.0.1', port=5000, debug=True)
+    app.run(host='127.0.0.1', port=5000, debug=True)

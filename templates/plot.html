@@ -3,44 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disease Graph</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-        }
-        .container {
-            margin-top: 50px;
-            padding: 20px;
-        }
-        img {
-            max-width: 90%;
-            height: auto;
-        }
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <title>Disease Probability Plot</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Probability Graph for {{ disease }}</h1>
-        <img src="data:image/png;base64,{{ plot_url }}" alt="Graph">
-        <br>
-        <button onclick=window.history.back()>Back</button>
-    </div>
+    <h1>Disease Probability Plot</h1>
+    <img src="data:image/png;base64,{{ plot_url }}" alt="Probability Plot">
+    <br>
+    <a href="/disease-prediction"><button>Back to Home</button></a>
 </body>
 </html>
